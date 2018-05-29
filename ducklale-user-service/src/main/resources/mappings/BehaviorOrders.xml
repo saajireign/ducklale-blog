@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.ducklale.user.domain.dao.BehaviorOrdersDao">
+
+	<!-- 映射结果集 -->
+	<resultMap id="behaviorOrdersResultMap" type="com.ducklale.user.domain.entity.BehaviorOrdersPO">
+		<id property="id" column="id" jdbcType="INTEGER"/>
+    	<result property="orderName" column="order_name" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="behaviorOrdersColumnList">
+	    <![CDATA[
+			id,order_name
+	    ]]>
+	</sql>
+	
+	<!-- 根据主键查询 -->
+	<select id="selectById" resultMap="behaviorOrdersResultMap"  parameterType="java.lang.Integer">
+		SELECT <include refid="behaviorOrdersColumnList" />
+	    <![CDATA[
+	    FROM t_behavior_orders 
+        WHERE 
+	        id = #{id,jdbcType=INTEGER}
+	    ]]>
+	</select>
+	
+	
+	<!-- 根据ID删除 -->
+    <delete id="deleteById"  parameterType="java.lang.String">
+	    <![CDATA[
+	        DELETE FROM t_behavior_orders 
+	        WHERE
+	        id = #{id,jdbcType=INTEGER}
+	    ]]>
+    </delete>
+   
+  	
+  	<!-- 根据参数对象中有值的进行插入-->
+	<insert id="insert" parameterType="com.ducklale.user.domain.entity.BehaviorOrdersPO" >
+		insert into t_behavior_orders
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	     	<if test="id != null" >
+		    id,
+		  	</if>
+	     	<if test="orderName != null" >
+		    order_name,
+		  	</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+	     	<if test="id != null" >
+		    #{id,jdbcType=INTEGER},
+		  	</if>
+	     	<if test="orderName != null" >
+		    #{orderName,jdbcType=VARCHAR},
+		  	</if>
+		</trim>
+	</insert>
+	
+	
+	<!-- 根据ID进行更新 -->
+	<update id="updateById"  parameterType="com.ducklale.user.domain.entity.BehaviorOrdersPO">
+		update t_behavior_orders
+		<set>
+			<if test="id != null" >
+			 id = #{id,jdbcType=INTEGER},
+			</if>
+			<if test="orderName != null" >
+			 order_name = #{orderName,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where
+			id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>
+

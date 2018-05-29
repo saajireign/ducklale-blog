@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.ducklale.user.domain.dao.LightingChargeDao">
+
+	<!-- 映射结果集 -->
+	<resultMap id="lightingChargeResultMap" type="com.ducklale.user.domain.entity.LightingChargePO">
+		<id property="id" column="id" jdbcType="INTEGER"/>
+    	<result property="userId" column="user_id" jdbcType="INTEGER"/>
+    	<result property="lightingPoints" column="lighting_points" jdbcType="INTEGER"/>
+    	<result property="chargingStatus" column="charging_status" jdbcType="TINYINT"/>
+    	<result property="action" column="action" jdbcType="VARCHAR"/>
+    	<result property="chargeDate" column="charge_date" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="lightingChargeColumnList">
+	    <![CDATA[
+			id,user_id,lighting_points,charging_status,action,charge_date
+	    ]]>
+	</sql>
+	
+	<!-- 根据主键查询 -->
+	<select id="selectById" resultMap="lightingChargeResultMap"  parameterType="java.lang.Integer">
+		SELECT <include refid="lightingChargeColumnList" />
+	    <![CDATA[
+	    FROM t_lighting_charge 
+        WHERE 
+	        id = #{id,jdbcType=INTEGER}
+	    ]]>
+	</select>
+	
+	
+	<!-- 根据ID删除 -->
+    <delete id="deleteById"  parameterType="java.lang.String">
+	    <![CDATA[
+	        DELETE FROM t_lighting_charge 
+	        WHERE
+	        id = #{id,jdbcType=INTEGER}
+	    ]]>
+    </delete>
+   
+  	
+  	<!-- 根据参数对象中有值的进行插入-->
+	<insert id="insert" parameterType="com.ducklale.user.domain.entity.LightingChargePO" >
+		insert into t_lighting_charge
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	     	<if test="id != null" >
+		    id,
+		  	</if>
+	     	<if test="userId != null" >
+		    user_id,
+		  	</if>
+	     	<if test="lightingPoints != null" >
+		    lighting_points,
+		  	</if>
+	     	<if test="chargingStatus != null" >
+		    charging_status,
+		  	</if>
+	     	<if test="action != null" >
+		    action,
+		  	</if>
+	     	<if test="chargeDate != null" >
+		    charge_date,
+		  	</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+	     	<if test="id != null" >
+		    #{id,jdbcType=INTEGER},
+		  	</if>
+	     	<if test="userId != null" >
+		    #{userId,jdbcType=INTEGER},
+		  	</if>
+	     	<if test="lightingPoints != null" >
+		    #{lightingPoints,jdbcType=INTEGER},
+		  	</if>
+	     	<if test="chargingStatus != null" >
+		    #{chargingStatus,jdbcType=TINYINT},
+		  	</if>
+	     	<if test="action != null" >
+		    #{action,jdbcType=VARCHAR},
+		  	</if>
+	     	<if test="chargeDate != null" >
+		    #{chargeDate,jdbcType=TIMESTAMP},
+		  	</if>
+		</trim>
+	</insert>
+	
+	
+	<!-- 根据ID进行更新 -->
+	<update id="updateById"  parameterType="com.ducklale.user.domain.entity.LightingChargePO">
+		update t_lighting_charge
+		<set>
+			<if test="id != null" >
+			 id = #{id,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null" >
+			 user_id = #{userId,jdbcType=INTEGER},
+			</if>
+			<if test="lightingPoints != null" >
+			 lighting_points = #{lightingPoints,jdbcType=INTEGER},
+			</if>
+			<if test="chargingStatus != null" >
+			 charging_status = #{chargingStatus,jdbcType=TINYINT},
+			</if>
+			<if test="action != null" >
+			 action = #{action,jdbcType=VARCHAR},
+			</if>
+			<if test="chargeDate != null" >
+			 charge_date = #{chargeDate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where
+			id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>
+

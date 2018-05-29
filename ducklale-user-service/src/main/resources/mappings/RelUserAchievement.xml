@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.ducklale.user.domain.dao.RelUserAchievementDao">
+
+	<!-- 映射结果集 -->
+	<resultMap id="relUserAchievementResultMap" type="com.ducklale.user.domain.entity.RelUserAchievementPO">
+		<id property="id" column="id" jdbcType="INTEGER"/>
+    	<result property="achievementId" column="achievement_id" jdbcType="INTEGER"/>
+    	<result property="userId" column="user_id" jdbcType="INTEGER"/>
+    	<result property="achievementDate" column="achievement_date" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="relUserAchievementColumnList">
+	    <![CDATA[
+			achievement_id,user_id,achievement_date,id
+	    ]]>
+	</sql>
+	
+	<!-- 根据主键查询 -->
+	<select id="selectById" resultMap="relUserAchievementResultMap"  parameterType="java.lang.Integer">
+		SELECT <include refid="relUserAchievementColumnList" />
+	    <![CDATA[
+	    FROM t_rel_user_achievement 
+        WHERE 
+	        id = #{id,jdbcType=INTEGER}
+	    ]]>
+	</select>
+	
+	
+	<!-- 根据ID删除 -->
+    <delete id="deleteById"  parameterType="java.lang.String">
+	    <![CDATA[
+	        DELETE FROM t_rel_user_achievement 
+	        WHERE
+	        id = #{id,jdbcType=INTEGER}
+	    ]]>
+    </delete>
+   
+  	
+  	<!-- 根据参数对象中有值的进行插入-->
+	<insert id="insert" parameterType="com.ducklale.user.domain.entity.RelUserAchievementPO" >
+		insert into t_rel_user_achievement
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	     	<if test="achievementId != null" >
+		    achievement_id,
+		  	</if>
+	     	<if test="userId != null" >
+		    user_id,
+		  	</if>
+	     	<if test="achievementDate != null" >
+		    achievement_date,
+		  	</if>
+	     	<if test="id != null" >
+		    id,
+		  	</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+	     	<if test="achievementId != null" >
+		    #{achievementId,jdbcType=INTEGER},
+		  	</if>
+	     	<if test="userId != null" >
+		    #{userId,jdbcType=INTEGER},
+		  	</if>
+	     	<if test="achievementDate != null" >
+		    #{achievementDate,jdbcType=TIMESTAMP},
+		  	</if>
+	     	<if test="id != null" >
+		    #{id,jdbcType=INTEGER},
+		  	</if>
+		</trim>
+	</insert>
+	<insert id="insertBatch">
+			INSERT INTO t_rel_user_achievement (achievement_id,user_id,achievement_date)
+			VALUES
+			<foreach collection="list" item="rel" separator=",">
+				(#{rel.achievementId,jdbcType=INTEGER},#{rel.userId,jdbcType=INTEGER}, #{rel.achievementDate,jdbcType=TIMESTAMP})
+			</foreach>
+	</insert>
+
+
+	<!-- 根据ID进行更新 -->
+	<update id="updateById"  parameterType="com.ducklale.user.domain.entity.RelUserAchievementPO">
+		update t_rel_user_achievement
+		<set>
+			<if test="achievementId != null" >
+			 achievement_id = #{achievementId,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null" >
+			 user_id = #{userId,jdbcType=INTEGER},
+			</if>
+			<if test="achievementDate != null" >
+			 achievement_date = #{achievementDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="id != null" >
+			 id = #{id,jdbcType=INTEGER},
+			</if>
+		</set>
+		where
+			id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>
+

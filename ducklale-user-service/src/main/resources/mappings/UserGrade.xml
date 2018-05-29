@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.ducklale.user.domain.dao.UserGradeDao">
+
+	<!-- 映射结果集 -->
+	<resultMap id="userGradeResultMap" type="com.ducklale.user.domain.entity.UserGradePO">
+		<id property="id" column="id" jdbcType="INTEGER"/>
+    	<result property="name" column="name" jdbcType="VARCHAR"/>
+    	<result property="grade" column="grade" jdbcType="INTEGER"/>
+    	<result property="lightingPoint" column="lighting_point" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="userGradeColumnList">
+	    <![CDATA[
+			name,id,grade,lighting_point
+	    ]]>
+	</sql>
+	
+	<!-- 根据主键查询 -->
+	<select id="selectById" resultMap="userGradeResultMap"  parameterType="java.lang.Integer">
+		SELECT <include refid="userGradeColumnList" />
+	    <![CDATA[
+	    FROM t_user_grade 
+        WHERE 
+	        id = #{id,jdbcType=INTEGER}
+	    ]]>
+	</select>
+	<!-- 根据主键查询 -->
+	<select id="getAll" resultMap="userGradeResultMap" >
+		SELECT <include refid="userGradeColumnList" />
+		<![CDATA[
+	    FROM t_user_grade
+        WHERE
+	        1=1
+	    ]]>
+	</select>
+	
+	<!-- 根据ID删除 -->
+    <delete id="deleteById"  parameterType="java.lang.String">
+	    <![CDATA[
+	        DELETE FROM t_user_grade 
+	        WHERE
+	        id = #{id,jdbcType=INTEGER}
+	    ]]>
+    </delete>
+   
+  	
+  	<!-- 根据参数对象中有值的进行插入-->
+	<insert id="insert" parameterType="com.ducklale.user.domain.entity.UserGradePO" >
+		insert into t_user_grade
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	     	<if test="name != null" >
+		    name,
+		  	</if>
+	     	<if test="id != null" >
+		    id,
+		  	</if>
+	     	<if test="grade != null" >
+		    grade,
+		  	</if>
+	     	<if test="lightingPoint != null" >
+		    lighting_point,
+		  	</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+	     	<if test="name != null" >
+		    #{name,jdbcType=VARCHAR},
+		  	</if>
+	     	<if test="id != null" >
+		    #{id,jdbcType=INTEGER},
+		  	</if>
+	     	<if test="grade != null" >
+		    #{grade,jdbcType=INTEGER},
+		  	</if>
+	     	<if test="lightingPoint != null" >
+		    #{lightingPoint,jdbcType=INTEGER},
+		  	</if>
+		</trim>
+	</insert>
+	
+	
+	<!-- 根据ID进行更新 -->
+	<update id="updateById"  parameterType="com.ducklale.user.domain.entity.UserGradePO">
+		update t_user_grade
+		<set>
+			<if test="name != null" >
+			 name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="id != null" >
+			 id = #{id,jdbcType=INTEGER},
+			</if>
+			<if test="grade != null" >
+			 grade = #{grade,jdbcType=INTEGER},
+			</if>
+			<if test="lightingPoint != null" >
+			 lighting_point = #{lightingPoint,jdbcType=INTEGER},
+			</if>
+		</set>
+		where
+			id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>
+

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.ducklale.user.domain.dao.RelUserTitleDao">
+
+	<!-- 映射结果集 -->
+	<resultMap id="relUserTitleResultMap" type="com.ducklale.user.domain.entity.RelUserTitlePO">
+		<id property="id" column="id" jdbcType="INTEGER"/>
+    	<result property="titleId" column="title_id" jdbcType="INTEGER"/>
+    	<result property="userId" column="user_id" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="relUserTitleColumnList">
+	    <![CDATA[
+			title_id,user_id,id
+	    ]]>
+	</sql>
+	
+	<!-- 根据主键查询 -->
+	<select id="selectById" resultMap="relUserTitleResultMap"  parameterType="java.lang.Integer">
+		SELECT <include refid="relUserTitleColumnList" />
+	    <![CDATA[
+	    FROM t_rel_user_title 
+        WHERE 
+	        id = #{id,jdbcType=INTEGER}
+	    ]]>
+	</select>
+	
+	
+	<!-- 根据ID删除 -->
+    <delete id="deleteById"  parameterType="java.lang.String">
+	    <![CDATA[
+	        DELETE FROM t_rel_user_title 
+	        WHERE
+	        id = #{id,jdbcType=INTEGER}
+	    ]]>
+    </delete>
+   
+  	
+  	<!-- 根据参数对象中有值的进行插入-->
+	<insert id="insert" parameterType="com.ducklale.user.domain.entity.RelUserTitlePO" >
+		insert into t_rel_user_title
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	     	<if test="titleId != null" >
+		    title_id,
+		  	</if>
+	     	<if test="userId != null" >
+		    user_id,
+		  	</if>
+	     	<if test="id != null" >
+		    id,
+		  	</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+	     	<if test="titleId != null" >
+		    #{titleId,jdbcType=INTEGER},
+		  	</if>
+	     	<if test="userId != null" >
+		    #{userId,jdbcType=INTEGER},
+		  	</if>
+	     	<if test="id != null" >
+		    #{id,jdbcType=INTEGER},
+		  	</if>
+		</trim>
+	</insert>
+	
+	
+	<!-- 根据ID进行更新 -->
+	<update id="updateById"  parameterType="com.ducklale.user.domain.entity.RelUserTitlePO">
+		update t_rel_user_title
+		<set>
+			<if test="titleId != null" >
+			 title_id = #{titleId,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null" >
+			 user_id = #{userId,jdbcType=INTEGER},
+			</if>
+			<if test="id != null" >
+			 id = #{id,jdbcType=INTEGER},
+			</if>
+		</set>
+		where
+			id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>
+
