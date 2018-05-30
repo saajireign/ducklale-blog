@@ -2,7 +2,7 @@ package com.ducklale.controller;
 
 import com.ducklale.service.DucklaleUserGradeService;
 import com.ducklale.service.DucklaleWebTestService;
-import com.ducklale.user.domain.dto.UserGradeDTO;
+import com.ducklale.user.api.dto.UserGradeDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;

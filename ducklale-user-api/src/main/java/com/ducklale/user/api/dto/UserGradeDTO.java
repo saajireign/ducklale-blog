@@ -1,4 +1,4 @@
-package com.ducklale.user.domain.dto;
+package com.ducklale.user.api.dto;
 
 import java.io.Serializable;
 
