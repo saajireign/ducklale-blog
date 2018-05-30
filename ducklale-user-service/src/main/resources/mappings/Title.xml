@@ -87,5 +87,19 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		where
 			id = #{id,jdbcType=INTEGER}
 	</update>
+	<!-- 批量插入 -->
+	<insert id="insertBatch"  parameterType="com.ducklale.user.domain.entity.TitlePO">
+		INSERT INTO t_title 
+		       	<trim prefix="(" suffix=")" suffixOverrides="," >
+	  				achievement_points,title,
+       			</trim>
+        VALUES
+       	<foreach collection="list" item="rel" separator=",">
+       	<trim prefix="(" suffix=")" suffixOverrides="," >
+       		#{rel.achievementPoints,jdbcType=INTEGER},#{rel.title,jdbcType=VARCHAR},
+       	</trim>
+       	</foreach>
+       	
+	</insert>
 </mapper>
 

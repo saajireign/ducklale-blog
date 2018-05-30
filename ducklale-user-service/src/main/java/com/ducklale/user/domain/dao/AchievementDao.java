@@ -1,6 +1,6 @@
 package com.ducklale.user.domain.dao;
 import com.ducklale.domain.dao.DucklaleDaoI;
-import com.ducklale.user.domain.query.AchievementQuery;
+import com.ducklale.user.api.dto.query.AchievementQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import org.apache.ibatis.annotations.Param;

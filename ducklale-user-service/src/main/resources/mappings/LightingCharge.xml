@@ -14,7 +14,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
     	<result property="lightingPoints" column="lighting_points" jdbcType="INTEGER"/>
     	<result property="chargingStatus" column="charging_status" jdbcType="TINYINT"/>
     	<result property="action" column="action" jdbcType="VARCHAR"/>
-    	<result property="chargeDate" column="charge_date" jdbcType="TIMESTAMP"/>
+    	<result property="chargeDate" column="charge_date" jdbcType="DATE"/>
 	</resultMap>
 	
 	<!-- 用于select查询公用抽取的列 -->
@@ -85,7 +85,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		    #{action,jdbcType=VARCHAR},
 		  	</if>
 	     	<if test="chargeDate != null" >
-		    #{chargeDate,jdbcType=TIMESTAMP},
+		    #{chargeDate,jdbcType=DATE},
 		  	</if>
 		</trim>
 	</insert>
@@ -111,11 +111,25 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			 action = #{action,jdbcType=VARCHAR},
 			</if>
 			<if test="chargeDate != null" >
-			 charge_date = #{chargeDate,jdbcType=TIMESTAMP},
+			 charge_date = #{chargeDate,jdbcType=DATE},
 			</if>
 		</set>
 		where
 			id = #{id,jdbcType=INTEGER}
 	</update>
+	<!-- 批量插入 -->
+	<insert id="insertBatch"  parameterType="com.ducklale.user.domain.entity.LightingChargePO">
+		INSERT INTO t_lighting_charge 
+		       	<trim prefix="(" suffix=")" suffixOverrides="," >
+	  				user_id,lighting_points,charging_status,action,charge_date,
+       			</trim>
+        VALUES
+       	<foreach collection="list" item="rel" separator=",">
+       	<trim prefix="(" suffix=")" suffixOverrides="," >
+       		#{rel.userId,jdbcType=INTEGER},#{rel.lightingPoints,jdbcType=INTEGER},#{rel.chargingStatus,jdbcType=TINYINT},#{rel.action,jdbcType=VARCHAR},#{rel.chargeDate,jdbcType=DATE},
+       	</trim>
+       	</foreach>
+       	
+	</insert>
 </mapper>
 

@@ -1,7 +1,8 @@
 package com.reign.test.service;
 
-import com.ducklale.user.domain.dto.AchievementDTO;
-import com.ducklale.user.domain.dto.RelUserAchievementDTO;
+import com.ducklale.user.api.dto.AchievementDTO;
+import com.ducklale.user.api.dto.RelUserAchievementDTO;
+import com.ducklale.user.api.service.IRestFulAchievementService;
 import com.ducklale.user.domain.service.IAchievementService;
 import com.ducklale.user.domain.service.IRelUserAchievementService;
 import com.reign.BaseTestCase;
@@ -17,7 +18,7 @@ public class RelUserAchievementServiceTest  extends BaseTestCase{
     @Autowired
     IRelUserAchievementService service;
     @Autowired
-    IAchievementService achievementService;
+    IRestFulAchievementService achievementService;
     @Test
     @Rollback(true)
     public void testBatch(){
@@ -30,7 +31,7 @@ public class RelUserAchievementServiceTest  extends BaseTestCase{
             dtos.add(dto);
         }
         service.insertBatch(dtos);
-        List<AchievementDTO> achieves = achievementService.getUserAchievements(1L);
+        List<RelUserAchievementDTO> achieves = achievementService.getUserAchievements(1L);
         System.out.println("");
     }
 }

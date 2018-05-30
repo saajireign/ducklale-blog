@@ -31,7 +31,14 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	        id = #{id,jdbcType=INTEGER}
 	    ]]>
 	</select>
-	
+	<select id="selectByUserId" resultMap="relUserAchievementResultMap"  parameterType="java.lang.Integer">
+		SELECT achievement_id,achievement_date,id
+		<![CDATA[
+	    FROM t_rel_user_achievement
+        WHERE
+	        id = #{userId,jdbcType=INTEGER}
+	    ]]>
+	</select>
 	
 	<!-- 根据ID删除 -->
     <delete id="deleteById"  parameterType="java.lang.String">
@@ -75,15 +82,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		  	</if>
 		</trim>
 	</insert>
-	<insert id="insertBatch">
-			INSERT INTO t_rel_user_achievement (achievement_id,user_id,achievement_date)
-			VALUES
-			<foreach collection="list" item="rel" separator=",">
-				(#{rel.achievementId,jdbcType=INTEGER},#{rel.userId,jdbcType=INTEGER}, #{rel.achievementDate,jdbcType=TIMESTAMP})
-			</foreach>
-	</insert>
-
-
+	
+	
 	<!-- 根据ID进行更新 -->
 	<update id="updateById"  parameterType="com.ducklale.user.domain.entity.RelUserAchievementPO">
 		update t_rel_user_achievement
@@ -104,5 +104,19 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		where
 			id = #{id,jdbcType=INTEGER}
 	</update>
+	<!-- 批量插入 -->
+	<insert id="insertBatch"  parameterType="com.ducklale.user.domain.entity.RelUserAchievementPO">
+		INSERT INTO t_rel_user_achievement 
+		       	<trim prefix="(" suffix=")" suffixOverrides="," >
+	  				achievement_id,user_id,achievement_date,
+       			</trim>
+        VALUES
+       	<foreach collection="list" item="rel" separator=",">
+       	<trim prefix="(" suffix=")" suffixOverrides="," >
+       		#{rel.achievementId,jdbcType=INTEGER},#{rel.userId,jdbcType=INTEGER},#{rel.achievementDate,jdbcType=TIMESTAMP},
+       	</trim>
+       	</foreach>
+       	
+	</insert>
 </mapper>
 

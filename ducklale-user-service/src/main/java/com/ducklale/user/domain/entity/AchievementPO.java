@@ -19,8 +19,16 @@ public class AchievementPO implements Serializable{
 	private String achievementDescription;
 	//成就点数
 	private int achievementPoints;
-	
 
+	private Integer achievementGrade;
+
+	public Integer getAchievementGrade() {
+		return achievementGrade;
+	}
+
+	public void setAchievementGrade(Integer achievementGrade) {
+		this.achievementGrade = achievementGrade;
+	}
 	public AchievementPO(){
 	}
 	

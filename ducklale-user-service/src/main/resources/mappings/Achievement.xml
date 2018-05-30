@@ -13,23 +13,24 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
     	<result property="achievementName" column="achievement_name" jdbcType="VARCHAR"/>
     	<result property="achievementDescription" column="achievement_description" jdbcType="VARCHAR"/>
     	<result property="achievementPoints" column="achievement_points" jdbcType="INTEGER"/>
+		<result property="achievementGrade" column="achievement_grade" jdbcType="INTEGER"/>
 	</resultMap>
 	
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="achievementColumnList">
 	    <![CDATA[
-			id,achievement_name,achievement_description,achievement_points
+			id,achievement_name,achievement_description,achievement_points,achievement_grade
 	    ]]>
 	</sql>
 
 	<sql id="taAchievementColumnList">
 		<![CDATA[
-			ta.id,ta.achievement_name,ta.achievement_description,ta.achievement_points
+			ta.id,ta.achievement_name,ta.achievement_description,ta.achievement_points,ta.achievement_grade
 	    ]]>
 	</sql>
 
 	<!-- 根据条件查询 -->
-	<select id="queryPageCount" resultType="java.lang.Integer"   parameterType="com.ducklale.user.domain.query.AchievementQuery">
+	<select id="queryPageCount" resultType="java.lang.Integer"   parameterType="com.ducklale.user.api.dto.query.AchievementQuery">
 		SELECT count(*)
 		<![CDATA[
 	    FROM t_achievement
@@ -44,10 +45,14 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			<if test="achievementDescription != null">
 				AND achievement_description like concat('%',#{achievementDescription,jdbcType=VARCHAR},'%')
 			</if>
+			<if test="achievementGrade != null">
+				AND achievement_grade = #{achievementGrade,jdbcType=VARCHAR}
+			</if>
+
 		</where>
 	</select>
 
-	<select id="queryPage" resultMap="achievementResultMap"  parameterType="com.ducklale.user.domain.query.AchievementQuery">
+	<select id="queryPage" resultMap="achievementResultMap"  parameterType="com.ducklale.user.api.dto.query.AchievementQuery">
 		SELECT <include refid="achievementColumnList" />
 		<![CDATA[
 	    FROM t_achievement
@@ -59,6 +64,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="achievementDescription != null">
 				AND achievement_description like concat('%',#{achievementDescription,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="achievementGrade != null">
+				AND achievement_grade = #{achievementGrade,jdbcType=VARCHAR}
 			</if>
 		</where>
 		limit #{offset},#{limit}
@@ -110,6 +118,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	     	<if test="achievementPoints != null" >
 		    achievement_points,
 		  	</if>
+			<if test="achievementGrade != null" >
+				achievement_grade,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides="," >
 	     	<if test="id != null" >
@@ -124,6 +135,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	     	<if test="achievementPoints != null" >
 		    #{achievementPoints,jdbcType=INTEGER},
 		  	</if>
+			<if test="achievementGrade != null" >
+				#{achievementGrade,jdbcType=INTEGER},
+			</if>
+
 		</trim>
 	</insert>
 	
@@ -144,9 +159,19 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			<if test="achievementPoints != null" >
 			 achievement_points = #{achievementPoints,jdbcType=INTEGER},
 			</if>
+			<if test="achievementGrade != null" >
+				#{achievementGrade,jdbcType=INTEGER},
+			</if>
 		</set>
 		where
 			id = #{id,jdbcType=INTEGER}
 	</update>
+	<insert id="insertBatch">
+		INSERT INTO t_achievement (achievement_name,achievement_description,achievement_points,achievement_grade)
+		VALUES
+		<foreach collection="list" item="rel" separator=",">
+			(#{rel.achievementName,jdbcType=VARCHAR},#{rel.achievementDescription,jdbcType=VARCHAR}, #{rel.achievementPoints,jdbcType=INTEGER}, #{rel.achievementGrade,jdbcType=INTEGER})
+		</foreach>
+	</insert>
 </mapper>
 

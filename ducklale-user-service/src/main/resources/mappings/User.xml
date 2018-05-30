@@ -15,7 +15,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
     	<result property="mobile" column="mobile" jdbcType="VARCHAR"/>
     	<result property="realName" column="real_name" jdbcType="VARCHAR"/>
     	<result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
-    	<result property="birthday" column="birthday" jdbcType="TIMESTAMP"/>
+    	<result property="birthday" column="birthday" jdbcType="DATE"/>
     	<result property="identityNo" column="identity_no" jdbcType="VARCHAR"/>
     	<result property="showingAchievement" column="showing_achievement" jdbcType="VARCHAR"/>
     	<result property="selfIntroduction" column="self_introduction" jdbcType="VARCHAR"/>
@@ -120,7 +120,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		    #{nickName,jdbcType=VARCHAR},
 		  	</if>
 	     	<if test="birthday != null" >
-		    #{birthday,jdbcType=TIMESTAMP},
+		    #{birthday,jdbcType=DATE},
 		  	</if>
 	     	<if test="identityNo != null" >
 		    #{identityNo,jdbcType=VARCHAR},
@@ -170,7 +170,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			 nick_name = #{nickName,jdbcType=VARCHAR},
 			</if>
 			<if test="birthday != null" >
-			 birthday = #{birthday,jdbcType=TIMESTAMP},
+			 birthday = #{birthday,jdbcType=DATE},
 			</if>
 			<if test="identityNo != null" >
 			 identity_no = #{identityNo,jdbcType=VARCHAR},
@@ -197,5 +197,19 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		where
 			id = #{id,jdbcType=INTEGER}
 	</update>
+	<!-- 批量插入 -->
+	<insert id="insertBatch"  parameterType="com.ducklale.user.domain.entity.UserPO">
+		INSERT INTO t_user 
+		       	<trim prefix="(" suffix=")" suffixOverrides="," >
+	  				user_name,password,mobile,real_name,nick_name,birthday,identity_no,showing_achievement,self_introduction,remove_flag,qq_no,head_icon_uri,achievement_points,
+       			</trim>
+        VALUES
+       	<foreach collection="list" item="rel" separator=",">
+       	<trim prefix="(" suffix=")" suffixOverrides="," >
+       		#{rel.userName,jdbcType=VARCHAR},#{rel.password,jdbcType=VARCHAR},#{rel.mobile,jdbcType=VARCHAR},#{rel.realName,jdbcType=VARCHAR},#{rel.nickName,jdbcType=VARCHAR},#{rel.birthday,jdbcType=DATE},#{rel.identityNo,jdbcType=VARCHAR},#{rel.showingAchievement,jdbcType=VARCHAR},#{rel.selfIntroduction,jdbcType=VARCHAR},#{rel.removeFlag,jdbcType=BIT},#{rel.qqNo,jdbcType=VARCHAR},#{rel.headIconUri,jdbcType=VARCHAR},#{rel.achievementPoints,jdbcType=INTEGER},
+       	</trim>
+       	</foreach>
+       	
+	</insert>
 </mapper>
 

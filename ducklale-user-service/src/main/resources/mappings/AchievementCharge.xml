@@ -117,5 +117,19 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		where
 			id = #{id,jdbcType=INTEGER}
 	</update>
+	<!-- 批量插入 -->
+	<insert id="insertBatch"  parameterType="com.ducklale.user.domain.entity.AchievementChargePO">
+		INSERT INTO t_achievement_charge 
+		       	<trim prefix="(" suffix=")" suffixOverrides="," >
+	  				achievement_id,user_id,charge_status,charge_points,charge_date,
+       			</trim>
+        VALUES
+       	<foreach collection="list" item="rel" separator=",">
+       	<trim prefix="(" suffix=")" suffixOverrides="," >
+       		#{rel.achievementId,jdbcType=INTEGER},#{rel.userId,jdbcType=INTEGER},#{rel.chargeStatus,jdbcType=TINYINT},#{rel.chargePoints,jdbcType=INTEGER},#{rel.chargeDate,jdbcType=TIMESTAMP},
+       	</trim>
+       	</foreach>
+       	
+	</insert>
 </mapper>
 

@@ -1,5 +1,6 @@
 package com.ducklale.user.domain.dao;
 import com.ducklale.domain.dao.DucklaleDaoI;
+import com.ducklale.user.api.dto.RelUserAchievementDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import org.apache.ibatis.annotations.Param;
@@ -15,5 +16,5 @@ import com.ducklale.user.domain.entity.RelUserAchievementPO;
 @Repository
 @Mapper
 public interface RelUserAchievementDao extends DucklaleDaoI<RelUserAchievementPO,Long> {
-    public void insertBatch(List<RelUserAchievementPO> pos);
+    public List<RelUserAchievementPO> selectByUserId(Long userId);
 }

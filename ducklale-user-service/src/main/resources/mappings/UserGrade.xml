@@ -31,15 +31,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	        id = #{id,jdbcType=INTEGER}
 	    ]]>
 	</select>
-	<!-- 根据主键查询 -->
-	<select id="getAll" resultMap="userGradeResultMap" >
-		SELECT <include refid="userGradeColumnList" />
-		<![CDATA[
-	    FROM t_user_grade
-        WHERE
-	        1=1
-	    ]]>
-	</select>
+	
 	
 	<!-- 根据ID删除 -->
     <delete id="deleteById"  parameterType="java.lang.String">
@@ -105,5 +97,19 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		where
 			id = #{id,jdbcType=INTEGER}
 	</update>
+	<!-- 批量插入 -->
+	<insert id="insertBatch"  parameterType="com.ducklale.user.domain.entity.UserGradePO">
+		INSERT INTO t_user_grade 
+		       	<trim prefix="(" suffix=")" suffixOverrides="," >
+	  				name,grade,lighting_point,
+       			</trim>
+        VALUES
+       	<foreach collection="list" item="rel" separator=",">
+       	<trim prefix="(" suffix=")" suffixOverrides="," >
+       		#{rel.name,jdbcType=VARCHAR},#{rel.grade,jdbcType=INTEGER},#{rel.lightingPoint,jdbcType=INTEGER},
+       	</trim>
+       	</foreach>
+       	
+	</insert>
 </mapper>
 

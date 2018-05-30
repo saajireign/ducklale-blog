@@ -6,6 +6,11 @@ import com.ducklale.domain.converter.impl.BeanCopyConverterFactory;
 import com.ducklale.domain.dao.DucklaleDaoI;
 import com.ducklale.domain.service.DucklaleServiceI;
 import com.ducklale.utils.ReflectUtil;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public abstract class DucklaleService<D,P,PK> extends BeanCopyConverter<D,P> implements DucklaleServiceI<D,PK> {
 
@@ -50,6 +55,39 @@ public abstract class DucklaleService<D,P,PK> extends BeanCopyConverter<D,P> imp
             e.printStackTrace();
         }
         return -1;
-    };
-
+    }
+    @Transactional
+    @Override
+    public Boolean insertBatch(List<D> dtos){
+        int batchSize = 1000;
+        int nowSize = 0;
+        Boolean flag = true;
+        if(dtos!=null){
+            List<P> dtoInsert = new ArrayList<>();
+            Iterator<D> iterDto = dtos.iterator();
+            while(iterDto.hasNext()){
+                if(nowSize==batchSize){
+                    try {
+                        getDao().insertBatch(dtoInsert);
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                        flag = false;
+                    }
+                    dtoInsert = new ArrayList<>();
+                    nowSize = 0;
+                }
+                dtoInsert.add(fromDto(iterDto.next()));
+                nowSize++;
+            }
+            if(dtoInsert!=null && !dtoInsert.isEmpty()){
+                try {
+                    getDao().insertBatch(dtoInsert);
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                    flag = false;
+                }
+            }
+        }
+        return flag;
+    }
 }
